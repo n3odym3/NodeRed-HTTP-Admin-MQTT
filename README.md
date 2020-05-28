@@ -34,16 +34,16 @@ If you have different Slaves you can select a specific Slave with the MQTT Topic
 <img src="/Images/SandboxID.png?raw=true" width="100%">
 
 #### 4) Pull the Flows config of the Slave
-Clic on the inject Node, the full Flows config of the Slave will appear.
+Clic on the inject Node, the full Flows config of the Slave will appear in the debug.
 Explore the array to find the "Label" of the Flow that you want to edit and copy it's corresponding ID
 <img src="/Images/GetFlows.png?raw=true" width="100%">
 
 #### 5) Paste the ID in the "Pull Flow" Node. Then Pull the Flow
-The slected Flow will be deployed in the Sandboax of the Master
+The slected Flow will be deployed in the Sandbox of the Master
 <img src="/Images/SetEditID.png?raw=true" width="100%">
 
 #### 6) Edit the Flow
-Got the the "Sandbox" tab and edit the Flow
+Go to the "Sandbox" tab and edit the Flow
 <img src="/Images/Sandbox.png?raw=true" width="100%">
 
 #### 7) Push the edited flow to the Slave
