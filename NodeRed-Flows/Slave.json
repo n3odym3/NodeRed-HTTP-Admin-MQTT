@@ -1,0 +1,514 @@
+[
+    {
+        "id": "6e05a072.ddae1",
+        "type": "tab",
+        "label": "Slave",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d8a67e48.3b749",
+        "type": "tab",
+        "label": "Flow To edit",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "cf82385a.2931b8",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "MQTT Broker",
+        "broker": "IP",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "c7f0c298.8c29",
+        "type": "http request",
+        "z": "6e05a072.ddae1",
+        "name": "POST /auth/token",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "http://localhost:1880/auth/token",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 490,
+        "y": 90,
+        "wires": [
+            [
+                "ec754b8a.3e4358"
+            ]
+        ]
+    },
+    {
+        "id": "ee90c1cd.d5ed4",
+        "type": "change",
+        "z": "6e05a072.ddae1",
+        "name": "POST /auth/token",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.client_id",
+                "pt": "msg",
+                "to": "node-red-editor",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.grant_type",
+                "pt": "msg",
+                "to": "password",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.scope",
+                "pt": "msg",
+                "to": "*",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.username",
+                "pt": "msg",
+                "to": "USER",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.password",
+                "pt": "msg",
+                "to": "PASSWORD",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 90,
+        "wires": [
+            [
+                "c7f0c298.8c29"
+            ]
+        ]
+    },
+    {
+        "id": "ec754b8a.3e4358",
+        "type": "json",
+        "z": "6e05a072.ddae1",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 650,
+        "y": 90,
+        "wires": [
+            [
+                "22689f94.56e73"
+            ]
+        ]
+    },
+    {
+        "id": "53e102a2.b5324c",
+        "type": "comment",
+        "z": "6e05a072.ddae1",
+        "name": "Token ",
+        "info": "",
+        "x": 80,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c8dbdeee.d6b45",
+        "type": "mqtt in",
+        "z": "6e05a072.ddae1",
+        "name": "Gen Token",
+        "topic": "Gen/Token",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "cf82385a.2931b8",
+        "x": 100,
+        "y": 90,
+        "wires": [
+            [
+                "ee90c1cd.d5ed4"
+            ]
+        ]
+    },
+    {
+        "id": "230f9371.46f58c",
+        "type": "change",
+        "z": "6e05a072.ddae1",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "token",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 920,
+        "y": 90,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "22689f94.56e73",
+        "type": "function",
+        "z": "6e05a072.ddae1",
+        "name": "Bearer",
+        "func": "msg.payload.access_token = \"Bearer \" + msg.payload.access_token\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 770,
+        "y": 90,
+        "wires": [
+            [
+                "230f9371.46f58c"
+            ]
+        ]
+    },
+    {
+        "id": "6bd7ecd5.f5e924",
+        "type": "http request",
+        "z": "6e05a072.ddae1",
+        "name": "GET /flows",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://localhost:1880/flows",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 430,
+        "y": 190,
+        "wires": [
+            [
+                "647dbb49.b389f4"
+            ]
+        ]
+    },
+    {
+        "id": "9c824daa.ddb2",
+        "type": "change",
+        "z": "6e05a072.ddae1",
+        "name": "GET /flows",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "headers",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "headers.Authorization",
+                "pt": "msg",
+                "to": "token.access_token",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "headers.Node-RED-API-Version",
+                "pt": "msg",
+                "to": "v1",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 270,
+        "y": 190,
+        "wires": [
+            [
+                "6bd7ecd5.f5e924"
+            ]
+        ]
+    },
+    {
+        "id": "5c739556.f02bac",
+        "type": "mqtt in",
+        "z": "6e05a072.ddae1",
+        "name": "Get Flows",
+        "topic": "Get/Flows/Slave",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "cf82385a.2931b8",
+        "x": 100,
+        "y": 190,
+        "wires": [
+            [
+                "9c824daa.ddb2"
+            ]
+        ]
+    },
+    {
+        "id": "647dbb49.b389f4",
+        "type": "mqtt out",
+        "z": "6e05a072.ddae1",
+        "name": "Resp Flows",
+        "topic": "Resp/Flows/Slave",
+        "qos": "",
+        "retain": "",
+        "broker": "cf82385a.2931b8",
+        "x": 590,
+        "y": 190,
+        "wires": []
+    },
+    {
+        "id": "99524943.1fa438",
+        "type": "change",
+        "z": "6e05a072.ddae1",
+        "name": "GET /flow",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "headers",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "headers.Authorization",
+                "pt": "msg",
+                "to": "token.access_token",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "headers.Node-RED-API-Version",
+                "pt": "msg",
+                "to": "v1",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 300,
+        "wires": [
+            [
+                "3ed8d388.afe59c"
+            ]
+        ]
+    },
+    {
+        "id": "3ed8d388.afe59c",
+        "type": "http request",
+        "z": "6e05a072.ddae1",
+        "name": "GET /flow/ID",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://localhost:1880/flow/{{{id}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 430,
+        "y": 300,
+        "wires": [
+            [
+                "dea1466f.b889c8"
+            ]
+        ]
+    },
+    {
+        "id": "d7b274e0.99c958",
+        "type": "mqtt in",
+        "z": "6e05a072.ddae1",
+        "name": "Pull Flow",
+        "topic": "Get/Flow/Slave",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "cf82385a.2931b8",
+        "x": 100,
+        "y": 300,
+        "wires": [
+            [
+                "99524943.1fa438"
+            ]
+        ]
+    },
+    {
+        "id": "dea1466f.b889c8",
+        "type": "mqtt out",
+        "z": "6e05a072.ddae1",
+        "name": "Resp Flow",
+        "topic": "Resp/Flow/Slave",
+        "qos": "",
+        "retain": "",
+        "broker": "cf82385a.2931b8",
+        "x": 590,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "7e1ffaee.9b79b4",
+        "type": "mqtt in",
+        "z": "6e05a072.ddae1",
+        "name": "",
+        "topic": "Push Flow",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "cf82385a.2931b8",
+        "x": 100,
+        "y": 410,
+        "wires": [
+            [
+                "eaa5fa94.4b86a8"
+            ]
+        ]
+    },
+    {
+        "id": "eaa5fa94.4b86a8",
+        "type": "change",
+        "z": "6e05a072.ddae1",
+        "name": "PUT /flow",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers.Authorization",
+                "pt": "msg",
+                "to": "token.access_token",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "headers.Node-RED-API-Version",
+                "pt": "msg",
+                "to": "v1",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "id",
+                "pt": "msg",
+                "to": "payload.id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 410,
+        "wires": [
+            [
+                "c212a8ad.8fb2b8"
+            ]
+        ]
+    },
+    {
+        "id": "c212a8ad.8fb2b8",
+        "type": "http request",
+        "z": "6e05a072.ddae1",
+        "name": "PUT /flow/ID",
+        "method": "PUT",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://localhost:1880/flow/{{{id}}}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 430,
+        "y": 410,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc98ff1e.3521d",
+        "type": "comment",
+        "z": "6e05a072.ddae1",
+        "name": "Send Flows to the Master",
+        "info": "",
+        "x": 140,
+        "y": 150,
+        "wires": []
+    },
+    {
+        "id": "ef19aa4c.2c3188",
+        "type": "comment",
+        "z": "d8a67e48.3b749",
+        "name": "TEST",
+        "info": "",
+        "x": 110,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "5683a935.a4c168",
+        "type": "comment",
+        "z": "6e05a072.ddae1",
+        "name": "Send Flow (selected ID) to the Master",
+        "info": "",
+        "x": 180,
+        "y": 250,
+        "wires": []
+    },
+    {
+        "id": "cf47b1cd.f130c",
+        "type": "comment",
+        "z": "6e05a072.ddae1",
+        "name": "Update the Flow (selected ID) ",
+        "info": "",
+        "x": 150,
+        "y": 360,
+        "wires": []
+    }
+]
